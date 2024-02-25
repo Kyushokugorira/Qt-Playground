@@ -20,6 +20,10 @@ def gacha10():
   x = r.choices(card_i, k=10, weights=card_p)
   return x
 
+def gacha100():
+  x = r.choices(card_i, k=100, weights=card_p)
+  return x
+
 # 時刻関連 ####
 def get_datatime():
   t = dt.datetime.now() # 現在時刻の取得
@@ -47,9 +51,14 @@ class MainWindow(Qw.QMainWindow):
     self.btn_run10.setGeometry(120,10,100,20)
     self.btn_run10.clicked.connect(self.btn_run10_clicked)
 
+    # 「100連」ボタンの生成と設定
+    self.btn_run100 = Qw.QPushButton('100連実行',self)
+    self.btn_run100.setGeometry(230,10,100,20)
+    self.btn_run100.clicked.connect(self.btn_run100_clicked)
+
     #「クリア」ボタンの生成と設定
     self.btn_clear = Qw.QPushButton('クリア',self)
-    self.btn_clear.setGeometry(230,10,100,20)
+    self.btn_clear.setGeometry(340,10,100,20)
     self.btn_clear.clicked.connect(self.btn_clear_clicked)
 
     # テキストボックス
@@ -148,6 +157,37 @@ class MainWindow(Qw.QMainWindow):
 
     # テキストボックスの表示を更新
     for i in range (10):
+        log = f'({get_datatime()})\n'
+        log += f'【{card_t[idx[i]]}】ランクのカードを1枚取得しました !! \n\n'
+        log += self.tb_log.toPlainText()
+        self.tb_log.setPlainText(log)
+
+    # ステータスバーの表示を更新
+    self.update_status()
+  
+  #「100連実行」ボタンの押下処理
+  def btn_run100_clicked(self):
+    idx = gacha100()
+    for i in range(100):
+      self.card_counts[idx[i]]+=1  # カード所持数の更新
+      self.charges += money       # 課金総額の更新
+
+    # プログレスバーダイアログの表示
+    gacha_msg = ['  ++++++  100連ガチャ抽選中  ++++++  ',
+                 '  ------  100連ガチャ抽選中  ------  ' ]
+    p_bar = Qw.QProgressDialog(gacha_msg[0],None,0,100,self)
+    p_bar.setWindowModality(Qc.Qt.WindowModality.WindowModal)
+    p_bar.setWindowTitle('ガチャ抽選')
+    p_bar.show()
+    for p in range(101):
+      p_bar.setValue(p)
+      if p % 10 == 0:
+        p_bar.setLabelText(gacha_msg[p//10%2])
+      Qt.QTest.qWait(5)
+    p_bar.close()
+
+    # テキストボックスの表示を更新
+    for i in range (100):
         log = f'({get_datatime()})\n'
         log += f'【{card_t[idx[i]]}】ランクのカードを1枚取得しました !! \n\n'
         log += self.tb_log.toPlainText()
