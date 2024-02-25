@@ -11,6 +11,7 @@ import PySide6.QtTest as Qt
 card_t = ('SSR','SR','R','N') # タイプ
 card_p = (1,10,20,25)         # 排出比
 card_i = list(range(len(card_t))) # インデックス
+money = 300
 def gacha():
   x = r.choices(card_i, k=1, weights=card_p)
   return x[0]
@@ -87,7 +88,7 @@ class MainWindow(Qw.QMainWindow):
   def btn_run_clicked(self):
     idx = gacha()
     self.card_counts[idx]+=1  # カード所持数の更新
-    self.charges += 300       # 課金総額の更新
+    self.charges += money       # 課金総額の更新
 
     # プログレスバーダイアログの表示
     gacha_msg = ['  ++++++  ガチャ抽選中  ++++++  ',
@@ -129,11 +130,11 @@ class MainWindow(Qw.QMainWindow):
     idx = gacha10()
     for i in range(10):
       self.card_counts[idx[i]]+=1  # カード所持数の更新
-      self.charges += 300       # 課金総額の更新
+      self.charges += money       # 課金総額の更新
 
     # プログレスバーダイアログの表示
-    gacha_msg = ['  ++++++  ガチャ抽選中  ++++++  ',
-                 '  ------  ガチャ抽選中  ------  ' ]
+    gacha_msg = ['  ++++++  10連ガチャ抽選中  ++++++  ',
+                 '  ------  10連ガチャ抽選中  ------  ' ]
     p_bar = Qw.QProgressDialog(gacha_msg[0],None,0,100,self)
     p_bar.setWindowModality(Qc.Qt.WindowModality.WindowModal)
     p_bar.setWindowTitle('ガチャ抽選')
