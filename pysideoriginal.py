@@ -30,7 +30,7 @@ class MainWindow(Qw.QMainWindow):
   def __init__(self):
     super().__init__() 
     self.setWindowTitle('MainWindow') 
-    self.setGeometry(100, 50, 640, 240) 
+    self.setGeometry(100, 50, 640, 440) 
 
     # ランクごとのカード所持数と総課金額の初期化
     self.card_counts = [0] * len(card_p)
@@ -53,7 +53,7 @@ class MainWindow(Qw.QMainWindow):
 
     # テキストボックス
     self.tb_log = Qw.QTextEdit('',self)
-    self.tb_log.setGeometry(10,40,620,170)
+    self.tb_log.setGeometry(10,40,620,370)
     self.tb_log.setReadOnly(True)
     self.tb_log.setPlaceholderText('(ここに実行ログを表示します)')
 
